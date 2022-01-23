@@ -1,36 +1,19 @@
-const buttontop = document.querySelector("#buttontop");
+const body = document.body,
+    scrollWrap = document.getElementsByClassName("smooth-scroll-wrapper")[0],
+    height = scrollWrap.getBoundingClientRect().height - 1,
+    speed = 0.07;
 
+let offset = 0;
 
-buttontop.addEventListener("click" , function () {
+body.style.height = Math.floor(height) + "px";
 
-    window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth"
-    });
-});
+function smoothScroll() {
+    offset += (window.pageYOffset - offset) * speed;
 
+    let scroll = "translateY(-" + offset + "px) translateZ(0)";
+    scrollWrap.style.transform = scroll;
 
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function(){
-    var currentScrollPos = window.pageYOffset;
-    if (prevScrollpos > currentScrollPos) {
-        document.getElementById("footer").style.bottom = "0";
-    } else {
-        document.getElementById("footer").style.bottom = "-100px";
-    }
-    prevScrollpos = currentScrollPos;
+    callScroll = requestAnimationFrame(smoothScroll);
 }
 
-
-const bodyTag = document.querySelector(".project_page")
-const progressTag = document.querySelector("div.progress")
-
-document.addEventListener("scroll", function(){
-     const pixels = window.pageYOffset
-     const pageHeight = bodyTag.getBoundingClientRect().height
-     const totalScrollableDistance = pageHeight - window.innerHeight
-
-    const percentage = pixels / totalScrollableDistance
-    progressTag.style.width = `${100 * percentage}%`
-})
+smoothScroll();
